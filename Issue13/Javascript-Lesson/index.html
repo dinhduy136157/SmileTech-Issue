@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý học sinh</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Quản lý học sinh</h1>
+    
+    <div class="form-group">
+        <label for="name">Tên học sinh:</label>
+        <input type="text" id="name" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="score">Điểm:</label>
+        <input type="number" id="score" min="0" max="10" step="0.1" required>
+    </div>
+    
+    <button onclick="addStudent()">Thêm học sinh</button>
+    
+    <h2>Danh sách học sinh</h2>
+    <div id="studentList"></div>
+    
+    <div>
+        <button onclick="sortByScore('asc')">Sắp xếp điểm tăng dần</button>
+        <button onclick="sortByScore('desc')">Sắp xếp điểm giảm dần</button>
+        <button onclick="sortByName('asc')">Sắp xếp tên A-Z</button>
+        <button onclick="sortByName('desc')">Sắp xếp tên Z-A</button>
+        <button onclick="showTopStudents()">Học sinh điểm cao nhất</button>
+        <button onclick="calculateAverage()">Điểm trung bình</button>
+    </div>
+    
+    <script>
+        let students = [];
+        
+        function addStudent() {
+            const name = document.getElementById('name').value.trim();
+            const score = parseFloat(document.getElementById('score').value);
+            
+            if (!name || isNaN(score) || score < 0 || score > 10) {
+                alert('Vui lòng nhập đúng thông tin học sinh!');
+                return;
+            }
+            
+            students.push({ name, score });
+            document.getElementById('name').value = '';
+            document.getElementById('score').value = '';
+            
+            displayStudents();
+        }
+        
+        function getGradeClass(score) {
+            if (score >= 8) return 'excellent';
+            if (score >= 6.5) return 'good';
+            return 'average';
+        }
+        
+        function displayStudents(studentArray = students) {
+            let html = '<table><tr><th>STT</th><th>Tên học sinh</th><th>Điểm</th></tr>';
+            
+            studentArray.forEach((student, index) => {
+                html += `<tr class="${getGradeClass(student.score)}">
+                    <td>${index + 1}</td>
+                    <td>${student.name}</td>
+                    <td>${student.score}</td>
+                </tr>`;
+            });
+            
+            html += '</table>';
+            document.getElementById('studentList').innerHTML = html;
+        }
+        
+        // Sắp xếp theo điểm (tự code, không dùng hàm built-in)
+        function sortByScore(order = 'asc') {
+            const sortedStudents = [...students];
+            
+            // Bubble sort
+            for (let i = 0; i < sortedStudents.length - 1; i++) {
+                for (let j = 0; j < sortedStudents.length - i - 1; j++) {
+                    const shouldSwap = order === 'asc' 
+                        ? sortedStudents[j].score > sortedStudents[j + 1].score 
+                        : sortedStudents[j].score < sortedStudents[j + 1].score;
+                    
+                    if (shouldSwap) {
+                        // Swap
+                        const temp = sortedStudents[j];
+                        sortedStudents[j] = sortedStudents[j + 1];
+                        sortedStudents[j + 1] = temp;
+                    }
+                }
+            }
+            
+            displayStudents(sortedStudents);
+        }
+        
+        // Sắp xếp theo tên (tự code, không dùng hàm built-in)
+        function sortByName(order = 'asc') {
+            const sortedStudents = [...students];
+            
+            // Bubble sort
+            for (let i = 0; i < sortedStudents.length - 1; i++) {
+                for (let j = 0; j < sortedStudents.length - i - 1; j++) {
+                    const name1 = sortedStudents[j].name.toLowerCase();
+                    const name2 = sortedStudents[j + 1].name.toLowerCase();
+                    
+                    let shouldSwap = false;
+                    
+                    if (order === 'asc') {
+                        shouldSwap = name1 > name2;
+                    } else {
+                        shouldSwap = name1 < name2;
+                    }
+                    
+                    if (shouldSwap) {
+                        // Swap
+                        const temp = sortedStudents[j];
+                        sortedStudents[j] = sortedStudents[j + 1];
+                        sortedStudents[j + 1] = temp;
+                    }
+                }
+            }
+            
+            displayStudents(sortedStudents);
+        }
+        
+        // Hiển thị học sinh có điểm cao nhất
+        function showTopStudents() {
+            if (students.length === 0) {
+                alert('Danh sách học sinh trống!');
+                return;
+            }
+            
+            // Tìm điểm cao nhất
+            let maxScore = students[0].score;
+            for (let i = 1; i < students.length; i++) {
+                if (students[i].score > maxScore) {
+                    maxScore = students[i].score;
+                }
+            }
+            
+            // Lọc ra các học sinh có điểm cao nhất
+            const topStudents = [];
+            for (let i = 0; i < students.length; i++) {
+                if (students[i].score === maxScore) {
+                    topStudents.push(students[i]);
+                }
+            }
+            
+            displayStudents(topStudents);
+            alert(`Điểm cao nhất là ${maxScore}. Có ${topStudents.length} học sinh đạt điểm này.`);
+        }
+        
+        // Tính điểm trung bình
+        function calculateAverage() {
+            if (students.length === 0) {
+                alert('Danh sách học sinh trống!');
+                return;
+            }
+            
+            let sum = 0;
+            for (let i = 0; i < students.length; i++) {
+                sum += students[i].score;
+            }
+            
+            const average = sum / students.length;
+            alert(`Điểm trung bình của lớp là: ${average.toFixed(2)}`);
+        }
+    </script>
+</body>
+</html>
