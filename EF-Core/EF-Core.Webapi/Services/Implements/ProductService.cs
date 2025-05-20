@@ -3,6 +3,8 @@ using EF_Core.Webapi.Dtos.Product;
 using EF_Core.Webapi.Entity;
 using EF_Core.Webapi.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 using static EF_Core.Webapi.Dtos.Product.UpdateProductDto;
 
 namespace EF_Core.Webapi.Services.Implements
@@ -10,10 +12,12 @@ namespace EF_Core.Webapi.Services.Implements
     public class ProductService : IProductService
     {
         private readonly ProdDbContext _context;
+        private readonly IDistributedCache _cache;
 
-        public ProductService(ProdDbContext context)
+        public ProductService(ProdDbContext context, IDistributedCache cache)
         {
             _context = context;
+            _cache = cache;
         }
 
         public async Task<ProductResponseDto> CreateProductAsync(ProductCreateDto dto)
@@ -29,7 +33,7 @@ namespace EF_Core.Webapi.Services.Implements
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
-            var category = await _context.Categories.FindAsync(dto.CategoryId);
+            await _cache.RemoveAsync("productList"); // xoá cache cũ
 
             return new ProductResponseDto
             {
@@ -38,13 +42,22 @@ namespace EF_Core.Webapi.Services.Implements
                 Price = product.Price,
                 Description = product.Description,
                 CategoryId = product.CategoryId,
-                CategoryName = category?.CategoryName
+                CategoryName = (await _context.Categories.FindAsync(product.CategoryId))?.CategoryName
             };
         }
 
+
         public async Task<List<ProductResponseDto>> GetAllProductsAsync()
         {
-            return await _context.Products
+            var cacheKey = "productList";
+            var cachedData = await _cache.GetStringAsync(cacheKey);
+
+            if (!string.IsNullOrEmpty(cachedData))
+            {
+                return JsonSerializer.Deserialize<List<ProductResponseDto>>(cachedData);
+            }
+
+            var products = await _context.Products
                 .Include(p => p.Category)
                 .Select(p => new ProductResponseDto
                 {
@@ -55,7 +68,16 @@ namespace EF_Core.Webapi.Services.Implements
                     CategoryId = p.CategoryId,
                     CategoryName = p.Category.CategoryName
                 }).ToListAsync();
+
+            // Cache lại dữ liệu trong Redis
+            var options = new DistributedCacheEntryOptions()
+                .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
+            var serialized = JsonSerializer.Serialize(products);
+            await _cache.SetStringAsync(cacheKey, serialized, options);
+
+            return products;
         }
+
 
         public async Task<ProductResponseDto> GetProductByIdAsync(int id)
         {

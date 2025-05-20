@@ -151,5 +151,15 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EF_Core.Webapi.Controllers.ProductsController",
+    "Method": "TestRedisConnection",
+    "RelativePath": "api/Products/test-redis",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   }
 ]

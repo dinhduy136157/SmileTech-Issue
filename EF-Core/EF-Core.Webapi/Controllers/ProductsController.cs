@@ -10,6 +10,7 @@ using EF_Core.Webapi.Entity;
 using EF_Core.Webapi.Dtos.Product;
 using EF_Core.Webapi.Services.Interfaces;
 using static EF_Core.Webapi.Dtos.Product.UpdateProductDto;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace EF_Core.Webapi.Controllers
 {
@@ -22,6 +23,25 @@ namespace EF_Core.Webapi.Controllers
         public ProductsController(IProductService productService)
         {
             _productService = productService;
+        }
+        [HttpGet("test-redis")]
+        public async Task<IActionResult> TestRedisConnection([FromServices] IDistributedCache cache)
+        {
+            try
+            {
+                var testKey = "test_connection";
+                await cache.SetStringAsync(testKey, "hello", new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(60)
+                });
+
+                var result = await cache.GetStringAsync(testKey);
+                return Ok(new { success = result == "hello", value = result });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
         }
 
         [HttpPost]

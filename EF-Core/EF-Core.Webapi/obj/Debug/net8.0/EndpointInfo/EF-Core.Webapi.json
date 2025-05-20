@@ -119,6 +119,18 @@
         }
       }
     },
+    "/api/Products/test-redis": {
+      "get": {
+        "tags": [
+          "Products"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Products": {
       "post": {
         "tags": [

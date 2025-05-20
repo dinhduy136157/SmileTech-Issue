@@ -265,3 +265,6 @@ C:\Users\Admin\source\SmileTech-Issue\EF-Core\EF-Core.Webapi\bin\Debug\net8.0\ru
 C:\Users\Admin\source\SmileTech-Issue\EF-Core\EF-Core.Webapi\bin\Debug\net8.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll
 C:\Users\Admin\source\SmileTech-Issue\EF-Core\EF-Core.Webapi\obj\Debug\net8.0\EF-Core.Webapi.RazorAssemblyInfo.cache
 C:\Users\Admin\source\SmileTech-Issue\EF-Core\EF-Core.Webapi\obj\Debug\net8.0\EF-Core.Webapi.RazorAssemblyInfo.cs
+C:\Users\Admin\source\SmileTech-Issue\EF-Core\EF-Core.Webapi\bin\Debug\net8.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+C:\Users\Admin\source\SmileTech-Issue\EF-Core\EF-Core.Webapi\bin\Debug\net8.0\Pipelines.Sockets.Unofficial.dll
+C:\Users\Admin\source\SmileTech-Issue\EF-Core\EF-Core.Webapi\bin\Debug\net8.0\StackExchange.Redis.dll

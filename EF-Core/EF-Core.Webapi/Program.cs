@@ -1,4 +1,4 @@
-using EF_Core.Webapi.Data;
+﻿using EF_Core.Webapi.Data;
 using EF_Core.Webapi.Services.Implements;
 using EF_Core.Webapi.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +13,15 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost:6379"; // địa chỉ Redis
+    options.InstanceName = "ProductApi:";     // tiền tố key Redis
+});
+
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
