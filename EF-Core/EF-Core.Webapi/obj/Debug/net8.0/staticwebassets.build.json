@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "UzzwXVwQQ5HKU6cnf5uslZJ/FqLnp10P+wQji1bB5XQ=",
+  "Source": "EF-Core.Webapi",
+  "BasePath": "_content/EF-Core.Webapi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
