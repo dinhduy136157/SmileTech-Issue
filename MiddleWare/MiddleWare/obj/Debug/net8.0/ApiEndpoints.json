@@ -1,0 +1,12 @@
+[
+  {
+    "ContainingType": "MiddleWare.Controllers.TestExceptionController",
+    "Method": "TestError",
+    "RelativePath": "api/TestException/test-error",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]
