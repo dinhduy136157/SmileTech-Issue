@@ -2,6 +2,7 @@
 using EF_Core.Webapi.Entity;
 using EF_Core.Webapi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace EF_Core.Webapi.Controllers
 {
@@ -10,10 +11,11 @@ namespace EF_Core.Webapi.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IUserService _userService;
-
-        public AuthController(IUserService userService)
+        private readonly IJwtService _jwtService;
+        public AuthController(IUserService userService, IJwtService jwtService)
         {
             _userService = userService;
+            _jwtService = jwtService;
         }
 
         [HttpPost("login")]
@@ -25,12 +27,29 @@ namespace EF_Core.Webapi.Controllers
                 return Unauthorized(new { Message = "Invalid username or password" });
             }
 
-            var (accessToken, refreshToken) = await _userService.GenerateTokenPairAsync(user);
+            var (accessToken, refreshToken) = await _jwtService.GenerateTokenPairAsync(user);
             return Ok(new
             {
                 AccessToken = accessToken,
                 RefreshToken = refreshToken
             });
         }
+
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto dto)
+        {
+            var result = await _jwtService.RefreshTokenAsync(dto.RefreshToken);
+
+            if (!result.IsSuccess)
+                return Unauthorized(new { Message = result.Error });
+
+            return Ok(new
+            {
+                AccessToken = result.AccessToken,
+                RefreshToken = result.RefreshToken
+            });
+        }
+
+
     }
 }

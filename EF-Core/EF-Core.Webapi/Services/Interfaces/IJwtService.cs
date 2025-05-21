@@ -1,9 +1,11 @@
-﻿namespace EF_Core.Webapi.Services.Interfaces
+﻿using EF_Core.Webapi.Dtos.Authentication;
+using EF_Core.Webapi.Entity;
+
+namespace EF_Core.Webapi.Services.Interfaces
 {
     public interface IJwtService
     {
-        string GenerateAccessToken(string userName, string role);
-        string GenerateRefreshToken();
+        Task<(string accessToken, string refreshToken)> GenerateTokenPairAsync(User user);
+        Task<RefreshTokenResultDto> RefreshTokenAsync(string refreshToken);
     }
-
 }

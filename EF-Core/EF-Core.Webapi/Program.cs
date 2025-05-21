@@ -16,6 +16,8 @@ builder.Services.AddDbContext<ProdDbContext>(options =>
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+
 
 
 //Cấu hình Jwt
