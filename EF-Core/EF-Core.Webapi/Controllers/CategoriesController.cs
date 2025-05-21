@@ -9,12 +9,15 @@ using EF_Core.Webapi.Data;
 using EF_Core.Webapi.Entity;
 using EF_Core.Webapi.Services.Interfaces;
 using EF_Core.Webapi.Dtos.Category;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EF_Core.Webapi.Controllers
 {
 
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "User")]
+
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;

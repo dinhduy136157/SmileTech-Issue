@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EF-Core.Webapi")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+95b4178e88b8576a4ce8b14b889cffb3268293bd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5114a139075ae5e1bcc1a6dfcac5ae13b0fc536d")]
 [assembly: System.Reflection.AssemblyProductAttribute("EF-Core.Webapi")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EF-Core.Webapi")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

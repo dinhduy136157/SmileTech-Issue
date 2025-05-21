@@ -11,11 +11,13 @@ using EF_Core.Webapi.Dtos.Product;
 using EF_Core.Webapi.Services.Interfaces;
 using static EF_Core.Webapi.Dtos.Product.UpdateProductDto;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EF_Core.Webapi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "User")]
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
